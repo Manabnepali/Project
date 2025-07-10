@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Stadium Seat Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            /* Added background image properties */
+            background-image: url("stadium.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        .login-container {
+            background-color: rgba(45, 55, 72, 0.8);
+            /* Semi-transparent background */
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(5px);
+            /* Optional: Add a slight blur effect behind the container */
+            -webkit-backdrop-filter: blur(5px);
+            /* For Safari */
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(74, 85, 104, 0.7);
+            /* Semi-transparent input background */
+            border: 1px solid rgba(74, 85, 104, 0.7);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            background-color: #48bb78;
+            /* Green button */
+            color: #fff;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .login-button:hover {
+            background-color: #38a169;
+            /* Darker green on hover */
+            transform: translateY(-2px);
+        }
+        
+        .login-button:disabled {
+            background-color: #a0aec0;
+            /* Gray when disabled */
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7;
+        }
+        /* Custom alert styling */
+        
+        .custom-alert {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .custom-alert-content {
+            background-color: #2d3748;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            color: #e2e8f0;
+        }
+        
+        .custom-alert-button {
+            background-color: #48bb78;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .custom-alert-button:hover {
+            background-color: #38a169;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1 class="text-3xl font-bold text-center text-indigo-400 mb-8">
+            Login to Your Account
+        </h1>
+        <form id="login-form">
+            <div class="mb-4">
+                <label for="email" class="block text-gray-400 text-sm font-medium mb-2">Email Address</label>
+                <input type="email" id="email" class="login-input" placeholder="you@example.com" required />
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-gray-400 text-sm font-medium mb-2">Password</label>
+                <input type="password" id="password" class="login-input" placeholder="********" required />
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+        <p class="text-center text-gray-400 text-sm mt-6">
+            Don't have an account?
+            <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium transition duration-300">Sign Up</a>
+        </p>
+    </div>
+
+    <script>
+        // JavaScript for login logic and custom alert
+        const loginForm = document.getElementById("login-form");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        function customAlert(message, type = "success") {
+            const alertBox = document.createElement("div");
+            alertBox.className = "custom-alert";
+            alertBox.innerHTML = `
+                <div class="custom-alert-content">
+                    <p class="text-lg mb-6 ${type === 'error' ? 'text-red-400' : 'text-green-400'}">${message}</p>
+                    <button id="alert-ok-button" class="custom-alert-button">OK</button>
+                </div>
+            `;
+            document.body.appendChild(alertBox);
+
+            const okButton = document.getElementById("alert-ok-button");
+            okButton.addEventListener("click", () => {
+                document.body.removeChild(alertBox);
+                if (type === "success") {
+                    window.location.href = "projectsample2.html"; // linking project html file
+                }
+            });
+            okButton.focus(); // Focus the OK button for accessibility
+        }
+
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Simple validation (for demonstration purposes)
+            if (email === "user@example.com" && password === "password123") {
+                customAlert("Login successful! Redirecting to booking page...", "success");
+            } else {
+                customAlert("Invalid email or password. Please try again.", "error");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
